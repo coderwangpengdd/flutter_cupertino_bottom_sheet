@@ -180,6 +180,9 @@ class CupertinoBottomSheetRouteArgs {
   final PreferredSizeWidget? appBar;
   final Brightness? brightness;
   final SystemUiOverlayStyle? systemUiOverlayStyle;
+  final double radius;
+  final bool isFirstLevel;
+  final Color? flipColor;
 
   /// A content for keyboard action panel.
   /// Must be used with [resizeToAvoidBottomInset] true
@@ -193,8 +196,11 @@ class CupertinoBottomSheetRouteArgs {
     this.resizeToAvoidBottomInset = true,
     this.barrierLabel,
     this.brightness,
+    this.radius = 16,
     this.keyboardActionPanelContent,
     this.appBar,
+    this.flipColor,
+    this.isFirstLevel = false,
     this.systemUiOverlayStyle,
   }) : assert(
           brightness == null || systemUiOverlayStyle == null,
@@ -297,6 +303,7 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
   Future<RawImage> takeScreenshot() async {
     final image = await renderRepaintBoundary.toImage();
     return RawImage(
+      color: widget.args.flipColor,
       image: image,
     );
   }
@@ -334,9 +341,9 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
     /// into a correct position while zooming the stack out
     if (_curRouteNumber == 0) {
       return ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12.0),
-          topRight: Radius.circular(12.0),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(widget.args.radius),
+          topRight: Radius.circular(widget.args.radius),
         ),
         child: _snapshot!,
       );
@@ -414,17 +421,19 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
             color: widget.args.shadeColor,
             child: Stack(
               children: [
-                Transform.translate(
-                  offset: Offset(
-                    0.0,
-                    top,
-                  ),
-                  child: Transform.scale(
-                    alignment: Alignment.topCenter,
-                    scale: 1.0 - (.1 * widget.animation.value),
-                    child: _buildSnapshot(),
-                  ),
-                ),
+                widget.args.isFirstLevel == true
+                    ? Container()
+                    : Transform.translate(
+                        offset: Offset(
+                          0.0,
+                          top,
+                        ),
+                        child: Transform.scale(
+                          alignment: Alignment.topCenter,
+                          scale: 1.0 - (.1 * widget.animation.value),
+                          child: _buildSnapshot(),
+                        ),
+                      ),
                 Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -443,9 +452,9 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
                       top: topNotch + kTopOffset,
                     ),
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        topRight: Radius.circular(12.0),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(widget.args.radius),
+                        topRight: Radius.circular(widget.args.radius),
                       ),
 
                       /// fixes this issue https://github.com/flutter/flutter/issues/51345

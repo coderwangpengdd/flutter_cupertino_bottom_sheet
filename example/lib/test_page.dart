@@ -18,7 +18,10 @@ class _TestPageState extends State<TestPage> {
       CupertinoBottomSheetRoute(
         args: CupertinoBottomSheetRouteArgs(
           brightness: Brightness.dark,
-          // systemUiOverlayStyle: SystemUiOverlayStyle.light,
+          shadeColor: Colors.yellow,
+          isFirstLevel: false,
+          radius: 16,
+          flipColor: Colors.red,
           swipeSettings: const SwipeSettings(
             canCloseBySwipe: true,
           ),
