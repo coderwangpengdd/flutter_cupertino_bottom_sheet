@@ -183,6 +183,7 @@ class CupertinoBottomSheetRouteArgs {
   final double radius;
   final bool isFirstLevel;
   final Color? flipColor;
+  final double? topHieght;
 
   /// A content for keyboard action panel.
   /// Must be used with [resizeToAvoidBottomInset] true
@@ -201,6 +202,7 @@ class CupertinoBottomSheetRouteArgs {
     this.appBar,
     this.flipColor,
     this.isFirstLevel = false,
+    this.topHieght = 0,
     this.systemUiOverlayStyle,
   }) : assert(
           brightness == null || systemUiOverlayStyle == null,
@@ -303,7 +305,6 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
   Future<RawImage> takeScreenshot() async {
     final image = await renderRepaintBoundary.toImage();
     return RawImage(
-      color: widget.args.flipColor,
       image: image,
     );
   }
@@ -401,7 +402,8 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
       return const SizedBox.shrink();
     }
 
-    final topNotch = MediaQuery.of(context).viewPadding.top;
+    final topNotch =
+        MediaQuery.of(context).viewPadding.top + (widget.args.topHieght ?? 0);
     const kTopOffset = 10.0;
     final child = CupertinoBottomSheet(
       child: AnimatedBuilder(
@@ -434,13 +436,11 @@ class __CupertinoRouteBuilderState extends State<_CupertinoRouteBuilder>
                           child: _buildSnapshot(),
                         ),
                       ),
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: widget.args.shadeColor.withOpacity(
-                    .16 * widget.animation.value,
-                  ),
-                ),
+                // Container(
+                //   width: double.infinity,
+                //   height: double.infinity,
+                //   color: Colors.red,
+                // ),
                 Transform.translate(
                   transformHitTests: true,
                   offset: Offset(

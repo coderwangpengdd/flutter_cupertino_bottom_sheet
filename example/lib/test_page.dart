@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_bottom_sheet/flutter_cupertino_bottom_sheet.dart';
 
@@ -21,7 +23,7 @@ class _TestPageState extends State<TestPage> {
           shadeColor: Colors.yellow,
           isFirstLevel: false,
           radius: 16,
-          flipColor: Colors.red,
+          flipColor: generateRandomColor(),
           swipeSettings: const SwipeSettings(
             canCloseBySwipe: true,
           ),
@@ -34,6 +36,15 @@ class _TestPageState extends State<TestPage> {
           return const TestPage();
         },
       ),
+    );
+  }
+
+  Color generateRandomColor() {
+    return Color.fromARGB(
+      255, // 透明度，这里设为255，即完全不透明
+      Random().nextInt(256), // 随机生成红色值
+      Random().nextInt(256), // 随机生成绿色值
+      Random().nextInt(256), // 随机生成蓝色值
     );
   }
 
@@ -80,6 +91,7 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
